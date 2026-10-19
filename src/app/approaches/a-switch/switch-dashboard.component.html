@@ -1,0 +1,225 @@
+<app-dashboard-shell
+  heading="A · @switch / @case"
+  summary="Every widget type is a hand-written @case with its own binding list. Adding a type means touching this template, the imports array and the TS type union."
+>
+  @for (widget of state.widgets(); track widget.id) {
+    @switch (widget.type) {
+      <!-- STATS -->
+      @case ('STATS') {
+        <app-stats-card-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+        />
+      }
+      <!-- CHART -->
+      @case ('CHART') {
+        <app-chart-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+          [timescale]="state.timescale()"
+        />
+      }
+      <!-- TABLE -->
+      @case ('TABLE') {
+        <app-table-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+          (widgetEvent)="state.log($event)"
+        />
+      }
+      <!-- TIMELINE -->
+      @case ('TIMELINE') {
+        <app-timeline-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+          [timescale]="state.timescale()"
+          (widgetEvent)="state.log($event)"
+        />
+      }
+      <!-- GAUGE -->
+      @case ('GAUGE') {
+        <app-gauge-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+        />
+      }
+      <!-- HEATMAP -->
+      @case ('HEATMAP') {
+        <app-heatmap-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+          [timescale]="state.timescale()"
+        />
+      }
+      <!-- SCATTER -->
+      @case ('SCATTER') {
+        <app-scatter-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+        />
+      }
+      <!-- DURATION_CURVE -->
+      @case ('DURATION_CURVE') {
+        <app-duration-curve-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+          [timescale]="state.timescale()"
+        />
+      }
+      <!-- CATEGORY_BAR -->
+      @case ('CATEGORY_BAR') {
+        <app-category-bar-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+        />
+      }
+      <!-- DONUT -->
+      @case ('DONUT') {
+        <app-donut-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+        />
+      }
+      <!-- KPI_SPARKLINE -->
+      @case ('KPI_SPARKLINE') {
+        <app-kpi-sparkline-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+          [timescale]="state.timescale()"
+        />
+      }
+      <!-- TEXT -->
+      @case ('TEXT') {
+        <app-text-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+        />
+      }
+      <!-- IMAGE -->
+      @case ('IMAGE') {
+        <app-image-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+        />
+      }
+      <!-- ALARM_LIST -->
+      @case ('ALARM_LIST') {
+        <app-alarm-list-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+          (widgetEvent)="state.log($event)"
+        />
+      }
+      <!-- TARGET_PROGRESS -->
+      @case ('TARGET_PROGRESS') {
+        <app-target-progress-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+        />
+      }
+      <!-- STATUS_GRID -->
+      @case ('STATUS_GRID') {
+        <app-status-grid-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+          (widgetEvent)="state.log($event)"
+        />
+      }
+      <!-- WEATHER -->
+      @case ('WEATHER') {
+        <app-weather-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+        />
+      }
+      <!-- PERIOD_COMPARISON -->
+      @case ('PERIOD_COMPARISON') {
+        <app-period-comparison-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+          [timescale]="state.timescale()"
+        />
+      }
+      <!-- SETPOINT -->
+      @case ('SETPOINT') {
+        <app-setpoint-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+          (widgetEvent)="state.log($event)"
+        />
+      }
+      <!-- FORECAST -->
+      @case ('FORECAST') {
+        <app-forecast-widget
+          [widget]="widget"
+          [editMode]="state.editMode()"
+          [density]="state.density()"
+          [loading]="state.loading()"
+          [locale]="state.locale()"
+          [timescale]="state.timescale()"
+        />
+      }
+      <!-- UNSUPPORTED -->
+      @default {
+        <app-unsupported-widget [type]="$any(widget).type" />
+      }
+    }
+  }
+</app-dashboard-shell>

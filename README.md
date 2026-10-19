@@ -1,5 +1,7 @@
 # SwitchCaseHell
 
+Comparison of ways to render dynamic dashboard widgets in Angular without a giant `@switch`. **Start with [GUIDE.md](GUIDE.md).** `npm start` runs the demo, `npm test` runs the specs and `npm run measure` reproduces the numbers.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.3.
 
 ## Development server

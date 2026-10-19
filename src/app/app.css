@@ -1,0 +1,27 @@
+.app-header {
+  border-bottom: 1px solid var(--line);
+  padding: 1rem 1.5rem 0;
+}
+h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+nav {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+nav a {
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px 6px 0 0;
+  color: var(--muted);
+  text-decoration: none;
+}
+nav a.active {
+  color: var(--fg);
+  background: var(--hover);
+  font-weight: 600;
+}
+main {
+  padding: 1.5rem;
+}
