@@ -1,61 +1,82 @@
-# SwitchCaseHell
+# Escaping switch-case hell
 
-Comparison of ways to render dynamic dashboard widgets in Angular without a giant `@switch`. **Start with [GUIDE.md](GUIDE.md).** `npm start` runs the demo, `npm test` runs the specs and `npm run measure` reproduces the numbers.
+Six ways to render a dashboard whose widgets are picked at runtime by a `type` field in Angular, side by side and running. The baseline is a giant `@switch`; the others replace it with a registry, `ngComponentOutlet`, or a typed map.
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.3.
+**Read [GUIDE.md](GUIDE.md) for the full analysis.** This page covers how to run the demo and where things are.
 
-## Development server
+## TL;DR
 
-To start a local development server, run:
+- At 20 widget types, `@switch` costs 20 edits to add one shared input and conflicts on every new widget PR.
+- A registry plus a renderer directive with reflection-based bindings (Approach B, Pattern 2) costs 3 edits for the same input and keeps each widget to one registry line.
+- A typed widget map (Approach D) gets full compile-time checking, at about 12 lines per widget.
+- `@switch` is still fine for small, stable sets of around 8 types or fewer.
 
-```bash
-ng serve
-```
+## Quick start
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Requires Node.js and npm.
 
 ```bash
-ng generate component component-name
+npm install
+npm start          # http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Routes
 
-```bash
-ng generate --help
+Every route renders the same dashboard: 20 widget types, 40 widgets, plus one unknown `HEATMAP_3D` widget that shows the fallback card.
+
+| Route | Approach | Entry point |
+|---|---|---|
+| `/a-switch` | A · `@switch` | [switch-dashboard.component.html](src/app/approaches/a-switch/switch-dashboard.component.html) |
+| `/b-strict` | B · Pattern 1, shared contract | [widget-renderer-strict.directive.ts](src/app/approaches/b-registry/widget-renderer-strict.directive.ts) |
+| `/b-flexible` | B · Pattern 2, reflection | [widget-renderer.directive.ts](src/app/approaches/b-registry/widget-renderer.directive.ts) |
+| `/b-lazy` | B · Pattern 2, lazy registry | [widget-renderer-lazy.directive.ts](src/app/approaches/b-registry/widget-renderer-lazy.directive.ts) |
+| `/c-outlet` | C · `ngComponentOutlet` | [outlet-dashboard.component.ts](src/app/approaches/c-outlet/outlet-dashboard.component.ts) |
+| `/d-typed-map` | D · Typed widget map | [widget-definitions.ts](src/app/approaches/d-typed-map/widget-definitions.ts) |
+
+## Scripts
+
+| Command | What it does |
+|---|---|
+| `npm start` | Serves the demo with `ng serve`. |
+| `npm run build` | Production build into `dist/`. |
+| `npm test` | Runs the specs with Vitest. Every approach must render the same dashboard and behave the same way. |
+| `npm run measure` | Builds with stats output and prints the line-count and bundle tables used in [GUIDE.md](GUIDE.md) §4. Add `-- --no-build` to reuse the last build. |
+
+## Project layout
+
+```
+src/app/
+├── approaches/      One folder per approach (a, b-registry, c-outlet, d-typed-map)
+│                    plus approaches.spec.ts, which checks all of them against one contract
+├── registry/        Type → component maps (eager and lazy loaders), reflection helpers
+├── widgets/         The 20 widget components and the shared widget contract and model
+├── shared/          Dashboard shell, shared state, unsupported-widget fallback
+└── data/            Sample dashboard used by every route
+scripts/measure.mjs  Measures code footprint and bundle cost per approach
 ```
 
-## Building
+## What the specs check
 
-To build the project run:
+For every approach, [approaches.spec.ts](src/app/approaches/approaches.spec.ts) checks:
 
-```bash
-ng build
-```
+- **Rendering:** all 40 widgets and one fallback card.
+- **Updates in place:** toggling edit mode doesn't re-create widgets.
+- **Wiring:** timescale changes and table events reach the widgets. The strict pattern is expected not to wire them, by design.
+- **Console:** no `console.error` output, so dev-mode binding warnings fail the test.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Narrower specs guard the gaps that types can't see: [widget-registry.spec.ts](src/app/registry/widget-registry.spec.ts) for input and output names, and [widget-definitions.spec.ts](src/app/approaches/d-typed-map/widget-definitions.spec.ts) for aliased inputs.
 
-## Running unit tests
+## Adding a widget
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+The approach you use decides the steps. For Approach B with Pattern 2, the checklist is:
 
-```bash
-ng test
-```
+1. Add the config type to the `Widget` union in the model.
+2. Create the component. Declare only the inputs and outputs it needs, using names from `CANDIDATE_INPUTS` and `CANDIDATE_OUTPUTS`.
+3. Add one line to `WIDGET_REGISTRY` (or `WIDGET_LOADERS` for lazy).
+4. Run `npm test`. The coverage spec fails if the widget uses an input name the renderer doesn't supply.
 
-## Running end-to-end tests
+The full checklists for B and D are in [GUIDE.md](GUIDE.md) §6.
 
-For end-to-end (e2e) testing, run:
+## Attribution
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Built with [Angular](https://angular.dev) 22 and [Vitest](https://vitest.dev). Generated with the [Angular CLI](https://github.com/angular/angular-cli).
